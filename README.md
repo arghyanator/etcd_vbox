@@ -36,8 +36,8 @@ $ vagrant box list
 ubuntu/xenial64 (virtualbox, 20171011.0.0)
 ```
 
-Modify Vagrantfile to add ansible (For Jenkins Master):
--------------------------------------------------------
+Modify Vagrantfile to add ansible (For 3 Node Etcd cluster):
+-----------------------------------------------------------
 ```
 $ egrep -v "^$|^#| #" Vagrantfile 
 VAGRANTFILE_API_VERSION = "2"
@@ -128,7 +128,7 @@ $ tree ../etcd_vbox/cookbooks/
     ├── etcd1.json
     ├── etcd2.json
     └── etcd3.json
-    
+
 ````
 Jenkins Setting up after initial admin password is provided
 -----------------------------------------------------------
