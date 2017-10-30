@@ -130,7 +130,7 @@ $ tree ../etcd_vbox/cookbooks/
     └── etcd3.json
 
 ````
-Jenkins setup
+Etcd setup
 -------------
 ![etcd  configuring]()
 
