@@ -130,7 +130,7 @@ $ tree ../etcd_vbox/cookbooks/
     └── etcd3.json
 
 ````
-Jenkins Setting up after initial admin password is provided
------------------------------------------------------------
+Jenkins setup
+-------------
 ![etcd  configuring]()
 
