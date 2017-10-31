@@ -118,8 +118,11 @@ Chef configuration
 ------------------
 ```
 $ tree ../etcd_vbox/cookbooks/
+$ tree ../etcd_vbox/cookbooks/
 ../etcd_vbox/cookbooks/
 ├── install_etcd
+│   ├── files
+│   │   └── check_etcd.sh
 │   ├── recipes
 │   │   └── default.rb
 │   └── templates
@@ -131,6 +134,14 @@ $ tree ../etcd_vbox/cookbooks/
 
 ````
 Etcd setup
--------------
-![etcd  configuring]()
+-----------
+Log in to one of the etcd VMs and check etcd status
+```
+root@etcd1:~# etcdctl cluster-health
+member 2aef8158ceb1a2bb is healthy: got healthy result from http://192.168.56.201:2379
+member 3bc0f367342558b5 is healthy: got healthy result from http://192.168.56.202:2379
+member a941e6890ee597a6 is healthy: got healthy result from http://192.168.56.203:2379
+cluster is healthy
+```
+
 

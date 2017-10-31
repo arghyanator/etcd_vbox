@@ -6,15 +6,44 @@ apt_update 'Update the apt cache daily' do
   action :periodic
 end
 
-# Install etcd package
+# Install etcd packages
 package 'etcd'
+package 'python-etcd'
+
+#Stop the etcd service
+service 'etcd' do
+  action :stop
+end
 
 # delete the default created config file
 file '/etc/default/etcd' do
 	action :delete
 end
 
+#Delete the default database files
+directory '/var/lib/etcd' do
+  recursive true
+  action :delete
+end
 
+#Recreate the /var/lib/etcd directory
+directory '/var/lib/etcd' do
+  owner 'etcd'
+  group 'etcd'
+  mode '0777'
+  action :create
+end
+
+#Recreate the /var/lib/etcd/default directory
+directory '/var/lib/etcd/default' do
+  owner 'etcd'
+  group 'etcd'
+  mode '0755'
+  action :create
+end
+
+
+# Set Node Hostname and IP address variables using ruby block
 ruby_block "sethostandip" do
     block do
         Chef::Resource::RubyBlock.send(:include, Chef::Mixin::ShellOut)      
@@ -28,6 +57,8 @@ ruby_block "sethostandip" do
     action :create
 end
 
+# Generate UUID for etcd cluster ID
+cluster_uuid = UUIDTools::UUID.random_create.to_s 
 
 template '/etc/default/etcd' do
 	source 'etcd_conf.erb'
@@ -48,4 +79,22 @@ end
 
 service 'etcd' do
   action :nothing
+end
+
+cookbook_file '/tmp/check_etcd.sh' do
+	source 'check_etcd.sh'
+	owner 'root'
+	group 'root'
+	mode '0755'
+	action :create
+end
+
+#Run script to check etcd status and change startup file for etcd after inital config
+bash 'run_check_etcd' do
+  cwd '/tmp'
+  user 'root'
+  group 'root'
+  code <<-EOH
+    /usr/bin/at now +5 minutes -f /tmp/check_etcd.sh
+  EOH
 end
